@@ -28,8 +28,8 @@
 const CON_FONT      = "12px system";
 const CON_MAIN      = can_main.getContext("2d");
 const CON_LOG       = can_log.getContext("2d");
-const SCREEN_WIDTH  = 1000;   // キャンバス幅
-const SCREEN_HEIGHT = 500;  // キャンバス高さ
+const SCREEN_WIDTH  = 360;   // キャンバス幅
+const SCREEN_HEIGHT = 360;  // キャンバス高さ
 // a
 in_act_a.addEventListener("click",() => {
     in_text2.value = change(in_text.value);
@@ -83,12 +83,12 @@ window.addEventListener("deviceorientation", function(e){
     let x = change(e.gamma);  // 角度を 0 ~ 180 に変換
     let y = change(e.beta);   // 角度を 0 ~ 180 に変換
     in_text2.value = `x=${x},y=${y}`;
-    CON_MAIN.clearRect(0,0,SCREEN_WIDTH,SCREEN_HEIGHT);
+    CON_LOG.clearRect(0,0,SCREEN_WIDTH,SCREEN_HEIGHT);
     // 丸作成
     CON_LOG.beginPath();
     CON_LOG.strokeStyle = "green";
     CON_LOG.fillStyle = "blue";
-    CON_LOG.arc(x,y,2,0,Math.PI*2,true);
+    CON_LOG.arc(x*2,y*2,2,0,Math.PI*2,true);
     CON_LOG.fill();
     CON_LOG.stroke();
 });
