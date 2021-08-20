@@ -15,6 +15,8 @@
     <input id="in_act_a" type="button" class="c_btn" value="Ａ">
     <input id="in_act_b" type="button" class="c_btn" value="Ｂ">
     <input id="in_act_c" type="button" class="c_btn" value="初期化">
+    <input id="in_text"  type="text">
+    <input id="in_text2" type="text">
   </div>
   <div id="div_can" class="c_can">  
     <canvas id="can_main"></canvas>
@@ -30,6 +32,18 @@ const SCREEN_WIDTH  = 1000;   // キャンバス幅
 const SCREEN_HEIGHT = 500;  // キャンバス高さ
 // a
 in_act_a.addEventListener("click",() => {
+    in_text2.value = change(in_text.value);
+    CON_MAIN.clearRect(0,0,SCREEN_WIDTH,SCREEN_HEIGHT);
+    // 丸作成
+    CON_LOG.beginPath();
+    CON_LOG.strokeStyle = "green";
+    CON_LOG.fillStyle = "blue";
+    CON_LOG.arc(in_text2.value,in_text2.value,2,0,Math.PI*2,true);
+    CON_LOG.fill();
+    CON_LOG.stroke();
+});
+// b
+in_act_b.addEventListener("click",() => {
     // 直線作成
     CON_LOG.beginPath();
     CON_LOG.lineWidth = 2;
@@ -37,9 +51,6 @@ in_act_a.addEventListener("click",() => {
     CON_LOG.moveTo(10,400);
     CON_LOG.lineTo(900,400);
     CON_LOG.stroke();
-});
-// b
-in_act_b.addEventListener("click",() => {
     // 丸作成
     CON_LOG.beginPath();
     CON_LOG.strokeStyle = "green";
@@ -63,25 +74,29 @@ window.onload = () => {
     can_main.width     = SCREEN_WIDTH;
     can_main.height    = SCREEN_HEIGHT;
     can_log.width      = SCREEN_WIDTH;
-    can_log.height     = SCREEN_HEIGHT;    
+    can_log.height     = SCREEN_HEIGHT;
 	  CON_MAIN.fillStyle = "#ddd";
 	  CON_MAIN.fillRect(0,0,SCREEN_WIDTH,SCREEN_HEIGHT);
 }
 // 加速度センサー
 window.addEventListener("deviceorientation", function(e){
-    // console.dir(e);
-	  // キャンバスに加速度センサーの各プロパティを表示
-    let dt = new Date();
+    let x = change(e.beta);   // 角度を 0 ~ 180 に変換
+    let y = change(e.gamma);  // 角度を 0 ~ 180 に変換
+    in_text2.value = `x=${x},y=${y}`;
     CON_MAIN.clearRect(0,0,SCREEN_WIDTH,SCREEN_HEIGHT);
-	  CON_MAIN.font = CON_FONT;
-	  CON_MAIN.fillStyle = "#555";
-	  CON_MAIN.textBaseline = "top";	                        // 文字のベースラインを上に
-	  CON_MAIN.fillText(`alpha: ${e.alpha}`, 10, 20);			// z軸
-	  CON_MAIN.fillText(`beta: ${e.beta}`, 10, 40);			// x軸
-	  CON_MAIN.fillText(`gamma: ${e.gamma}`, 10, 60);	    // y軸
-	  CON_MAIN.fillText(`absolute: ${e.absolute}`, 10, 80);  // 相対値: true 絶対値: false
-	  CON_MAIN.fillText(dt, 10, 100);              // date
+    // 丸作成
+    CON_LOG.beginPath();
+    CON_LOG.strokeStyle = "green";
+    CON_LOG.fillStyle = "blue";
+    CON_LOG.arc(x,y,2,0,Math.PI*2,true);
+    CON_LOG.fill();
+    CON_LOG.stroke();
 });
+// 角度を 0 ~ 180 に変換
+function change(val) {
+    let v = Math.round(val * 10) / 10;
+    return Math.max(0,Math.min(v + 90,180));
+}
 // info 表示
 function info_disp(info) {
     if (info == info_save && info_cnt < 9) {
