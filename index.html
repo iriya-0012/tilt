@@ -14,7 +14,7 @@
   <div id="div_act">
     <input id="in_act_a" type="button" class="c_btn" value="Ａ">
     <input id="in_act_b" type="button" class="c_btn" value="Ｂ">
-    <input id="in_act_c" type="button" class="c_btn" value="info 初期化">
+    <input id="in_act_c" type="button" class="c_btn" value="初期化">
   </div>
   <div id="div_can" class="c_can">  
     <canvas id="can_main"></canvas>
@@ -50,7 +50,9 @@ in_act_b.addEventListener("click",() => {
 });
 // c
 in_act_c.addEventListener("click",() => {
-    // info 初期化
+    // 初期化
+    CON_MAIN.clearRect(0,0,SCREEN_WIDTH,SCREEN_HEIGHT);
+    CON_LOG.clearRect(0,0,SCREEN_WIDTH,SCREEN_HEIGHT);
     info_cnt = 0;
     info_save = "";
     pre_info.innerHTML = "";
@@ -70,6 +72,7 @@ window.addEventListener("deviceorientation", function(e){
     // console.dir(e);
 	  // キャンバスに加速度センサーの各プロパティを表示
     let dt = new Date();
+    CON_MAIN.clearRect(0,0,SCREEN_WIDTH,SCREEN_HEIGHT);
 	  CON_MAIN.font = CON_FONT;
 	  CON_MAIN.fillStyle = "#555";
 	  CON_MAIN.textBaseline = "top";	                        // 文字のベースラインを上に
