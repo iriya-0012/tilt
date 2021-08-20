@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width" >
+  <title>Tilt</title>
+  <style>
+  *               { margin: 0; padding: 0; }
+  .c_can          { position: relative; }
+  .c_can > canvas { position: absolute; }
+  </style>
+</head>
+<body>
+  <div id="div_act">
+    <input id="in_act_a" type="button" class="c_btn" value="Ａ">
+    <input id="in_act_b" type="button" class="c_btn" value="Ｂ">
+    <input id="in_act_c" type="button" class="c_btn" value="info 初期化">
+  </div>
+  <div id="div_can" class="c_can">  
+    <canvas id="can_main"></canvas>
+    <canvas id="can_log"></canvas>
+  <div id="div_info">
+    <pre id="pre_info"></pre>
+  </div>
+  <script type="text/javascript">
+const CON_FONT      = "12px system";
+const CON_MAIN      = can_main.getContext("2d");
+const CON_LOG       = can_log.getContext("2d");
+const SCREEN_WIDTH  = 1000;   // キャンバス幅
+const SCREEN_HEIGHT = 500;  // キャンバス高さ
+// a
+in_act_a.addEventListener("click",() => {
+    // 直線作成
+    CON_LOG.beginPath();
+    CON_LOG.lineWidth = 2;
+    CON_LOG.strokeStyle = "red";
+    CON_LOG.moveTo(10,400);
+    CON_LOG.lineTo(900,400);
+    CON_LOG.stroke();
+});
+// b
+in_act_b.addEventListener("click",() => {
+    // 丸作成
+    CON_LOG.beginPath();
+    CON_LOG.strokeStyle = "green";
+    CON_LOG.fillStyle = "blue";
+    CON_LOG.arc(300,300,2,0,Math.PI*2,true);
+    CON_LOG.fill();
+    CON_LOG.stroke();
+});
+// c
+in_act_c.addEventListener("click",() => {
+    // info 初期化
+    info_cnt = 0;
+    info_save = "";
+    pre_info.innerHTML = "";
+});
+// ロード時
+window.onload = () => {
+	  // キャンバスをクリア
+    can_main.width     = SCREEN_WIDTH;
+    can_main.height    = SCREEN_HEIGHT;
+    can_log.width      = SCREEN_WIDTH;
+    can_log.height     = SCREEN_HEIGHT;    
+	  CON_MAIN.fillStyle = "#ddd";
+	  CON_MAIN.fillRect(0,0,SCREEN_WIDTH,SCREEN_HEIGHT);
+}
+// 加速度センサー
+window.addEventListener("deviceorientation", function(e){
+    // console.dir(e);
+	  // キャンバスに加速度センサーの各プロパティを表示
+    let dt = new Date();
+	  CON_MAIN.font = CON_FONT;
+	  CON_MAIN.fillStyle = "#555";
+	  CON_MAIN.textBaseline = "top";	                        // 文字のベースラインを上に
+	  CON_MAIN.fillText(`alpha: ${e.alpha}`, 10, 20);			// z軸
+	  CON_MAIN.fillText(`beta: ${e.beta}`, 10, 40);			// x軸
+	  CON_MAIN.fillText(`gamma: ${e.gamma}`, 10, 60);	    // y軸
+	  CON_MAIN.fillText(`absolute: ${e.absolute}`, 10, 80);  // 相対値: true 絶対値: false
+	  CON_MAIN.fillText(dt, 10, 100);              // date
+});
+// info 表示
+function info_disp(info) {
+    if (info == info_save && info_cnt < 9) {
+        info_cnt++;
+        pre_info.innerHTML = pre_info.innerHTML.substring(0,pre_info.innerHTML.length - 1) + "↑\n";
+    } else {
+        let dt = new Date();
+        let HH = ("00" + (dt.getHours())).slice(-2);
+        let MM = ("00" + (dt.getMinutes())).slice(-2);
+        pre_info.innerHTML += `${HH}:${MM} ${info}\n`;
+        info_cnt = 0;
+        info_save = info;
+    }
+}
+let info_cnt  = 0;
+let info_save = "";
+  </script>
+  </body>
+</html>
