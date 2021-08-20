@@ -80,8 +80,8 @@ window.onload = () => {
 }
 // 加速度センサー
 window.addEventListener("deviceorientation", function(e){
-    let x = change(e.beta);   // 角度を 0 ~ 180 に変換
-    let y = change(e.gamma);  // 角度を 0 ~ 180 に変換
+    let x = change(e.gamma);  // 角度を 0 ~ 180 に変換
+    let y = change(e.beta);   // 角度を 0 ~ 180 に変換
     in_text2.value = `x=${x},y=${y}`;
     CON_MAIN.clearRect(0,0,SCREEN_WIDTH,SCREEN_HEIGHT);
     // 丸作成
