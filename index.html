@@ -1,118 +1,113 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ja">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width" >
-  <title>Tilt</title>
-  <style>
-  *               { margin: 0; padding: 0; }
-  .c_can          { position: relative; }
-  .c_can > canvas { position: absolute; }
-  </style>
-</head>
-<body>
-  <div id="div_act">
-    <input id="in_act_a" type="button" class="c_btn" value="Ａ">
-    <input id="in_act_b" type="button" class="c_btn" value="Ｂ">
-    <input id="in_act_c" type="button" class="c_btn" value="初期化">
-    <input id="in_text"  type="text">
-    <input id="in_text2" type="text">
-  </div>
-  <div id="div_can" class="c_can">  
-    <canvas id="can_main"></canvas>
-    <canvas id="can_log"></canvas>
-  <div id="div_info">
-    <pre id="pre_info"></pre>
-  </div>
-  <script type="text/javascript">
-const CON_FONT      = "12px system";
-const CON_MAIN      = can_main.getContext("2d");
-const CON_LOG       = can_log.getContext("2d");
-const SCREEN_WIDTH  = 360;   // キャンバス幅
-const SCREEN_HEIGHT = 360;  // キャンバス高さ
-// a
-in_act_a.addEventListener("click",() => {
-    in_text2.value = change(in_text.value);
-    CON_MAIN.clearRect(0,0,SCREEN_WIDTH,SCREEN_HEIGHT);
-    // 丸作成
-    CON_LOG.beginPath();
-    CON_LOG.strokeStyle = "green";
-    CON_LOG.fillStyle = "blue";
-    CON_LOG.arc(in_text2.value,in_text2.value,2,0,Math.PI*2,true);
-    CON_LOG.fill();
-    CON_LOG.stroke();
-});
-// b
-in_act_b.addEventListener("click",() => {
-    // 直線作成
-    CON_LOG.beginPath();
-    CON_LOG.lineWidth = 2;
-    CON_LOG.strokeStyle = "red";
-    CON_LOG.moveTo(10,400);
-    CON_LOG.lineTo(900,400);
-    CON_LOG.stroke();
-    // 丸作成
-    CON_LOG.beginPath();
-    CON_LOG.strokeStyle = "green";
-    CON_LOG.fillStyle = "blue";
-    CON_LOG.arc(300,300,2,0,Math.PI*2,true);
-    CON_LOG.fill();
-    CON_LOG.stroke();
-});
-// c
-in_act_c.addEventListener("click",() => {
-    // 初期化
-    CON_MAIN.clearRect(0,0,SCREEN_WIDTH,SCREEN_HEIGHT);
-    CON_LOG.clearRect(0,0,SCREEN_WIDTH,SCREEN_HEIGHT);
-    info_cnt = 0;
-    info_save = "";
-    pre_info.innerHTML = "";
-});
-// ロード時
-window.onload = () => {
-	  // キャンバスをクリア
-    can_main.width     = SCREEN_WIDTH;
-    can_main.height    = SCREEN_HEIGHT;
-    can_log.width      = SCREEN_WIDTH;
-    can_log.height     = SCREEN_HEIGHT;
-	  CON_MAIN.fillStyle = "#ddd";
-	  CON_MAIN.fillRect(0,0,SCREEN_WIDTH,SCREEN_HEIGHT);
-}
-// 加速度センサー
-window.addEventListener("deviceorientation", function(e){
-    let x = change(e.gamma);  // 角度を 0 ~ 180 に変換
-    let y = change(e.beta);   // 角度を 0 ~ 180 に変換
-    in_text2.value = `x=${x},y=${y}`;
-    CON_LOG.clearRect(0,0,SCREEN_WIDTH,SCREEN_HEIGHT);
-    // 丸作成
-    CON_LOG.beginPath();
-    CON_LOG.strokeStyle = "green";
-    CON_LOG.fillStyle = "blue";
-    CON_LOG.arc(x*2,y*2,2,0,Math.PI*2,true);
-    CON_LOG.fill();
-    CON_LOG.stroke();
-});
-// 角度を 0 ~ 180 に変換
-function change(val) {
-    let v = Math.round(val * 10) / 10;
-    return Math.max(0,Math.min(v + 90,180));
-}
-// info 表示
-function info_disp(info) {
-    if (info == info_save && info_cnt < 9) {
-        info_cnt++;
-        pre_info.innerHTML = pre_info.innerHTML.substring(0,pre_info.innerHTML.length - 1) + "↑\n";
-    } else {
-        let dt = new Date();
-        let HH = ("00" + (dt.getHours())).slice(-2);
-        let MM = ("00" + (dt.getMinutes())).slice(-2);
-        pre_info.innerHTML += `${HH}:${MM} ${info}\n`;
-        info_cnt = 0;
-        info_save = info;
-    }
-}
-let info_cnt  = 0;
-let info_save = "";
-  </script>
-  </body>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width" >
+        <title>Document</title>
+    </head>
+    <body>
+        <!--button id="measure">計測</button -->
+        <ul>
+            <li>【方角】<span id="s_aaaa"></span></li>    
+
+
+            <li>【時間】<span id="s_time"></span></li>    
+            <li>【方角】<span id="s_dire"></span></li>
+            <li>【absolute】<span id="s_abso"></span></li>
+            <li>【alpha】<span id="s_alpha"></span></li>
+            <li>【beta】<span id="s_beta"></span></li>
+            <li>【gamma】<span id="s_gamma"></span></li>
+        </ul>
+        <script type="text/javascript">
+
+
+            if (navigator.geolocation){
+                navigator.geolocation.getCurrentPosition(
+                function(position){
+                var hd = position.coords.heading || "方角には未対応です";
+                var txt = "方角:"+hd;
+                document.getElementById("s_aaaa").innerHTML = txt;
+                }
+                );
+                }else{
+                document.getElementById("s_aaaa").innerHTML = "Geo Location APIに対応していません";
+            }
+
+
+
+
+
+            //document.getElementById("measure").addEventListener("click",() => init());
+            // DOM構築完了イベントハンドラ登録
+            //window.addEventListener("DOMContentLoaded", init);
+            // 初期化
+            //function init() {
+                window.addEventListener("deviceorientationabsolute",orientation,true);
+            //}
+            // ジャイロスコープと地磁気をセンサーから取得
+            function orientation(event) {
+                let dt = new Date();
+                let HH = ("00" + (dt.getHours())).slice(-2);
+                let MM = ("00" + (dt.getMinutes())).slice(-2);
+                let SS = ("00" + (dt.getSeconds())).slice(-2);
+                s_time.innerHTML += `${HH}:${MM}:${SS}`;
+                //console.dir(event)
+                let absolute = event.absolute;
+                let alpha = event.alpha;
+                let beta = event.beta;
+                let gamma = event.gamma;
+                // deviceorientationabsoluteイベントのalphaを補正
+                let degrees = compassHeading(alpha, beta, gamma);           
+                let direction;
+                if ((degrees > 337.5 && degrees < 360) || (degrees > 0 && degrees < 22.5)) {
+                    direction = "北";
+                } else if (degrees > 22.5 && degrees < 67.5) {
+                    direction = "北東";
+                } else if (degrees > 67.5 && degrees < 112.5) {
+                    direction = "東";
+                } else if (degrees > 112.5 && degrees < 157.5) {
+                    direction = "東南";
+                } else if (degrees > 157.5 && degrees < 202.5) {
+                    direction = "南";
+                } else if (degrees > 202.5 && degrees < 247.5) {
+                    direction = "南西";
+                } else if (degrees > 247.5 && degrees < 292.5) {
+                    direction = "西";
+                } else if (degrees > 292.5 && degrees < 337.5) {
+                    direction = "北西";
+                }
+                s_dire.innerHTML = `${direction} : ${degrees}`;
+                s_abso.innerHTML = absolute + "aaa";
+                s_alpha.innerHTML = alpha + "bbb";
+                s_beta.innerHTML = beta + "ccc";
+                s_gamma.innerHTML = gamma + "ddd";
+            }
+            // 端末の傾き補正（Android用）
+            // https://www.w3.org/TR/orientation-event/
+            function compassHeading(alpha, beta, gamma) {
+                var degtorad = Math.PI / 180; // Degree-to-Radian conversion
+                var _x = beta ? beta * degtorad : 0; // beta value
+                var _y = gamma ? gamma * degtorad : 0; // gamma value
+                var _z = alpha ? alpha * degtorad : 0; // alpha value
+                var cX = Math.cos(_x);
+                var cY = Math.cos(_y);
+                var cZ = Math.cos(_z);
+                var sX = Math.sin(_x);
+                var sY = Math.sin(_y);
+                var sZ = Math.sin(_z);
+                // Calculate Vx and Vy components
+                var Vx = -cZ * sY - sZ * sX * cY;
+                var Vy = -sZ * sY + cZ * sX * cY;
+                // Calculate compass heading
+                var compassHeading = Math.atan(Vx / Vy);
+                // Convert compass heading to use whole unit circle
+                if (Vy < 0) {
+                    compassHeading += Math.PI;
+                } else if (Vx < 0) {
+                    compassHeading += 2 * Math.PI;
+                }
+                return compassHeading * (180 / Math.PI); // Compass Heading (in degrees)
+            }
+        </script>   
+    </body>
 </html>
