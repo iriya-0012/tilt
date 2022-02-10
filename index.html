@@ -42,7 +42,7 @@
                 let HH = ("00" + (dt.getHours())).slice(-2);
                 let MM = ("00" + (dt.getMinutes())).slice(-2);
                 let SS = ("00" + (dt.getSeconds())).slice(-2);
-                s_time.innerHTML += `${HH}:${MM}:${SS}`;
+                s_time.innerHTML = `${HH}:${MM}:${SS}`;
                 //console.dir(event)
                 let absolute = event.absolute;
                 let alpha = event.alpha;
