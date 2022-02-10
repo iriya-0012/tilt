@@ -8,9 +8,7 @@
     <body>
         <!--button id="measure">計測</button -->
         <ul>
-            <li>【方角】<span id="s_aaaa"></span></li>    
-
-
+            <!--li>【方角】<span id="s_aaaa"></span></li-->    
             <li>【時間】<span id="s_time"></span></li>    
             <li>【方角】<span id="s_dire"></span></li>
             <li>【absolute】<span id="s_abso"></span></li>
@@ -19,9 +17,7 @@
             <li>【gamma】<span id="s_gamma"></span></li>
         </ul>
         <script type="text/javascript">
-
-
-            if (navigator.geolocation){
+            /*if (navigator.geolocation){
                 navigator.geolocation.getCurrentPosition(
                 function(position){
                 var hd = position.coords.heading || "方角には未対応です";
@@ -31,11 +27,7 @@
                 );
                 }else{
                 document.getElementById("s_aaaa").innerHTML = "Geo Location APIに対応していません";
-            }
-
-
-
-
+            }*/
 
             //document.getElementById("measure").addEventListener("click",() => init());
             // DOM構築完了イベントハンドラ登録
@@ -77,10 +69,10 @@
                     direction = "北西";
                 }
                 s_dire.innerHTML = `${direction} : ${degrees}`;
-                s_abso.innerHTML = absolute + "aaa";
-                s_alpha.innerHTML = alpha + "bbb";
-                s_beta.innerHTML = beta + "ccc";
-                s_gamma.innerHTML = gamma + "ddd";
+                s_abso.innerHTML = absolute;
+                s_alpha.innerHTML = alpha;
+                s_beta.innerHTML = beta;
+                s_gamma.innerHTML = gamma;
             }
             // 端末の傾き補正（Android用）
             // https://www.w3.org/TR/orientation-event/
