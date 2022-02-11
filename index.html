@@ -32,7 +32,7 @@
                 let beta = event.beta;
                 let gamma = event.gamma;
                 // deviceorientationabsoluteイベントのalphaを補正
-                let degrees = Math.round(compassHeading(alpha, beta, gamma),1);           
+                let degrees = Math.round(compassHeading(alpha, beta, gamma),2);           
                 let direction;
                 if      (degrees < 22.5) {direction = "北"}
                 else if (degrees < 67.5) {direction = "北東"}
@@ -63,9 +63,9 @@
                 }*/
                 s_dire.innerHTML = `${direction} : ${degrees}`;
                 s_abso.innerHTML = absolute;
-                s_alpha.innerHTML = Math.round(alpha,1);
-                s_beta.innerHTML = Math.round(beta,1);
-                s_gamma.innerHTML = Math.round(gamma,1);
+                s_alpha.innerHTML = Math.round(alpha,2);
+                s_beta.innerHTML = Math.round(beta,2);
+                s_gamma.innerHTML = Math.round(gamma,2);
                 //
                 can.beginPath();
                 can.arc(100,50,50,Math.PI/2 + 0.1,Math.PI/2 - 0.1,true);
