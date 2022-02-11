@@ -3,39 +3,22 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width" >
-        <title>Document</title>
+        <title>Tilt</title>
     </head>
     <body>
-        <!--button id="measure">計測</button -->
         <ul>
-            <!--li>【方角】<span id="s_aaaa"></span></li-->    
-            <li>【時間】<span id="s_time"></span></li>    
-            <li>【方角】<span id="s_dire"></span></li>
+            <li>【時間】<span id="s_time"></span></li>           
             <li>【absolute】<span id="s_abso"></span></li>
             <li>【alpha】<span id="s_alpha"></span></li>
             <li>【beta】<span id="s_beta"></span></li>
             <li>【gamma】<span id="s_gamma"></span></li>
+            <li>【方角】<span id="s_dire"></span></li>
         </ul>
+        <canvas id="c_main" width="200" height="200"></canvas>
         <script type="text/javascript">
-            /*if (navigator.geolocation){
-                navigator.geolocation.getCurrentPosition(
-                function(position){
-                var hd = position.coords.heading || "方角には未対応です";
-                var txt = "方角:"+hd;
-                document.getElementById("s_aaaa").innerHTML = txt;
-                }
-                );
-                }else{
-                document.getElementById("s_aaaa").innerHTML = "Geo Location APIに対応していません";
-            }*/
-
-            //document.getElementById("measure").addEventListener("click",() => init());
-            // DOM構築完了イベントハンドラ登録
-            //window.addEventListener("DOMContentLoaded", init);
-            // 初期化
-            //function init() {
-                window.addEventListener("deviceorientationabsolute",orientation,true);
-            //}
+            //
+            let can = document.getElementById("c_main").getContext("2d");
+            window.addEventListener("deviceorientationabsolute",orientation,true);
             // ジャイロスコープと地磁気をセンサーから取得
             function orientation(event) {
                 let dt = new Date();
@@ -49,16 +32,26 @@
                 let beta = event.beta;
                 let gamma = event.gamma;
                 // deviceorientationabsoluteイベントのalphaを補正
-                let degrees = compassHeading(alpha, beta, gamma);           
+                let degrees = Math.round(compassHeading(alpha, beta, gamma),1);           
                 let direction;
-                if ((degrees > 337.5 && degrees < 360) || (degrees > 0 && degrees < 22.5)) {
+                if      (degrees < 22.5) {direction = "北"}
+                else if (degrees < 67.5) {direction = "北東"}
+                else if (degrees < 112.5) {direction = "東"}
+                else if (degrees < 157.5) {direction = "南東"}
+                else if (degrees < 202.5) {direction = "南"}
+                else if (degrees < 247.5) {direction = "南西"}
+                else if (degrees < 292.5) {direction = "西"}
+                else if (degrees < 337.5) {direction = "北西"}
+                else                      {direction = "北"}
+
+                /*if ((degrees > 337.5 && degrees < 360) || (degrees > 0 && degrees < 22.5)) {
                     direction = "北";
                 } else if (degrees > 22.5 && degrees < 67.5) {
                     direction = "北東";
                 } else if (degrees > 67.5 && degrees < 112.5) {
                     direction = "東";
                 } else if (degrees > 112.5 && degrees < 157.5) {
-                    direction = "東南";
+                    direction = "南東";
                 } else if (degrees > 157.5 && degrees < 202.5) {
                     direction = "南";
                 } else if (degrees > 202.5 && degrees < 247.5) {
@@ -67,15 +60,21 @@
                     direction = "西";
                 } else if (degrees > 292.5 && degrees < 337.5) {
                     direction = "北西";
-                }
+                }*/
                 s_dire.innerHTML = `${direction} : ${degrees}`;
                 s_abso.innerHTML = absolute;
-                s_alpha.innerHTML = alpha;
-                s_beta.innerHTML = beta;
-                s_gamma.innerHTML = gamma;
+                s_alpha.innerHTML = Math.round(alpha,1);
+                s_beta.innerHTML = Math.round(beta,1);
+                s_gamma.innerHTML = Math.round(gamma,1);
+                //
+                can.beginPath();
+                can.arc(100,50,50,Math.PI/2 + 0.1,Math.PI/2 - 0.1,true);
+                can.lineTo(100,50);
+                can.closePath();
+                can.stroke();
+                can.fillStyle = "red";
             }
-            // 端末の傾き補正（Android用）
-            // https://www.w3.org/TR/orientation-event/
+            // 端末の傾き補正
             function compassHeading(alpha, beta, gamma) {
                 var degtorad = Math.PI / 180; // Degree-to-Radian conversion
                 var _x = beta ? beta * degtorad : 0; // beta value
