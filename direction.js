@@ -41,7 +41,7 @@ class Direction {
         let Vx = -cZ * sY - sZ * sX * cY;
         let Vy = -sZ * sY + cZ * sX * cY;
         // 向
-        this.head = Math.atan(Vx / Vy);
+        this.head = Math.round(Math.atan(Vx / Vy),6);
         // 向変換
         if      (Vy < 0) {this.head += Math.PI}
         else if (Vx < 0) {this.head += 2 * Math.PI}
