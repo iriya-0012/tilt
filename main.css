@@ -1,0 +1,35 @@
+body {
+    background:#004000;
+    color:white;
+    font-size: 14px;
+    font-weight: 100;
+    margin: 0px 0px 0px 0px;
+}
+button {
+    background:#e0ffff;
+    color:green;
+    border: solid 3px;
+    border-radius: 5px / 5px;
+    padding: 0px 3px 0px 3px;
+    height: 27px;
+    width: 50px;
+}
+button:hover {
+    background:#70ffff;
+}
+th {
+    background:#008000;
+    border: solid 1px;
+    padding: 0px 10px 0px 10px;
+}
+td {
+    border: solid 1px;
+    padding: 0px 10px 0px 10px;
+}
+.canvas_a {
+    position: relative;
+    background:white;
+}
+.canvas_a > canvas {
+    position: absolute;
+}
