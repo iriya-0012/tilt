@@ -79,7 +79,7 @@ function get_data() {
     tbody.rows[6].cells[2].innerHTML = cTilt.y;
     // canvas
     CON_SUB.clearRect(0,0,canvas_sub.width,canvas_sub.height);
-    con_arc(CON_SUB,120 - cTilt.gamma,120 - cTilt.beta,2,"red");
+    con_arc(CON_SUB,120 - cTilt.gamma * 3,120 - cTilt.beta * 3,2,"red");
 }
 // 開始
 let timerId;    // タイマーid
