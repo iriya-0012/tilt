@@ -45,7 +45,7 @@ class Direction {
         // 向変換
         if      (Vy < 0) {Vh += Math.PI}
         else if (Vx < 0) {Vh += 2 * Math.PI}
-        this.head = Math.round(Vh,6);    
+        this.head = Math.round(Vh * 1000000) / 1000000;
         // 変換
         this.degrees = Math.round(this.head * (180 / Math.PI),1);
         // 方向
