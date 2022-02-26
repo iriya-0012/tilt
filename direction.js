@@ -41,10 +41,11 @@ class Direction {
         let Vx = -cZ * sY - sZ * sX * cY;
         let Vy = -sZ * sY + cZ * sX * cY;
         // 向
-        this.head = Math.round(Math.atan(Vx / Vy),6);
+        let Vh = Math.atan(Vx / Vy);
         // 向変換
-        if      (Vy < 0) {this.head += Math.PI}
-        else if (Vx < 0) {this.head += 2 * Math.PI}
+        if      (Vy < 0) {Vh += Math.PI}
+        else if (Vx < 0) {Vh += 2 * Math.PI}
+        this.head = Math.round(Vh,6);    
         // 変換
         this.degrees = Math.round(this.head * (180 / Math.PI),1);
         // 方向
