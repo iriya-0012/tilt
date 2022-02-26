@@ -1,104 +1,92 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ja">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width" >
-        <title>Tilt</title>
-    </head>
-    <body>
-        <ul>
-            <li>【時間】<span id="s_time"></span></li>           
-            <li>【absolute】<span id="s_abso"></span></li>
-            <li>【alpha】<span id="s_alpha"></span></li>
-            <li>【beta】<span id="s_beta"></span></li>
-            <li>【gamma】<span id="s_gamma"></span></li>
-            <li>【方角】<span id="s_dire"></span></li>
-        </ul>
-        <canvas id="c_main" width="200" height="200"></canvas>
-        <script type="text/javascript">
-            //
-            let can = document.getElementById("c_main").getContext("2d");
-            window.addEventListener("deviceorientationabsolute",orientation,true);
-            // ジャイロスコープと地磁気をセンサーから取得
-            function orientation(event) {
-                let dt = new Date();
-                let HH = ("00" + (dt.getHours())).slice(-2);
-                let MM = ("00" + (dt.getMinutes())).slice(-2);
-                let SS = ("00" + (dt.getSeconds())).slice(-2);
-                s_time.innerHTML = `${HH}:${MM}:${SS}`;
-                //console.dir(event)
-                let absolute = event.absolute;
-                let alpha = event.alpha;
-                let beta = event.beta;
-                let gamma = event.gamma;
-                // deviceorientationabsoluteイベントのalphaを補正
-                let degrees = Math.round(compassHeading(alpha, beta, gamma),2);           
-                let direction;
-                if      (degrees < 22.5) {direction = "北"}
-                else if (degrees < 67.5) {direction = "北東"}
-                else if (degrees < 112.5) {direction = "東"}
-                else if (degrees < 157.5) {direction = "南東"}
-                else if (degrees < 202.5) {direction = "南"}
-                else if (degrees < 247.5) {direction = "南西"}
-                else if (degrees < 292.5) {direction = "西"}
-                else if (degrees < 337.5) {direction = "北西"}
-                else                      {direction = "北"}
-
-                /*if ((degrees > 337.5 && degrees < 360) || (degrees > 0 && degrees < 22.5)) {
-                    direction = "北";
-                } else if (degrees > 22.5 && degrees < 67.5) {
-                    direction = "北東";
-                } else if (degrees > 67.5 && degrees < 112.5) {
-                    direction = "東";
-                } else if (degrees > 112.5 && degrees < 157.5) {
-                    direction = "南東";
-                } else if (degrees > 157.5 && degrees < 202.5) {
-                    direction = "南";
-                } else if (degrees > 202.5 && degrees < 247.5) {
-                    direction = "南西";
-                } else if (degrees > 247.5 && degrees < 292.5) {
-                    direction = "西";
-                } else if (degrees > 292.5 && degrees < 337.5) {
-                    direction = "北西";
-                }*/
-                s_dire.innerHTML = `${direction} : ${degrees}`;
-                s_abso.innerHTML = absolute;
-                s_alpha.innerHTML = Math.round(alpha,2);
-                s_beta.innerHTML = Math.round(beta,2);
-                s_gamma.innerHTML = Math.round(gamma,2);
-                //
-                can.beginPath();
-                can.arc(100,50,50,Math.PI/2 + 0.1,Math.PI/2 - 0.1,true);
-                can.lineTo(100,50);
-                can.closePath();
-                can.stroke();
-                can.fillStyle = "red";
-            }
-            // 端末の傾き補正
-            function compassHeading(alpha, beta, gamma) {
-                var degtorad = Math.PI / 180; // Degree-to-Radian conversion
-                var _x = beta ? beta * degtorad : 0; // beta value
-                var _y = gamma ? gamma * degtorad : 0; // gamma value
-                var _z = alpha ? alpha * degtorad : 0; // alpha value
-                var cX = Math.cos(_x);
-                var cY = Math.cos(_y);
-                var cZ = Math.cos(_z);
-                var sX = Math.sin(_x);
-                var sY = Math.sin(_y);
-                var sZ = Math.sin(_z);
-                // Calculate Vx and Vy components
-                var Vx = -cZ * sY - sZ * sX * cY;
-                var Vy = -sZ * sY + cZ * sX * cY;
-                // Calculate compass heading
-                var compassHeading = Math.atan(Vx / Vy);
-                // Convert compass heading to use whole unit circle
-                if (Vy < 0) {
-                    compassHeading += Math.PI;
-                } else if (Vx < 0) {
-                    compassHeading += 2 * Math.PI;
-                }
-                return compassHeading * (180 / Math.PI); // Compass Heading (in degrees)
-            }
-        </script>   
-    </body>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width" >
+  <title>Map</title>
+  <link rel="stylesheet" href="main.css" type="text/css">
+</head>
+<body id="body">
+  <!-- main -->    
+  <div>
+    <button id="but_start">start</button>
+    <button id="but_stop">stop</button>
+    <span id ="span_a"></span>
+  </div>
+  <!-- main -->
+  <div>
+    <table class="border-solid">
+      <thead>
+        <tr>
+          <th>key</th>
+          <th>Direction</th>              
+          <th>Tilt</th>
+        </tr>
+      </thead>
+      <tbody id="tbody">
+        <tr>
+          <td>時間</td>
+          <td></td>              
+          <td></td>
+        </tr>
+        <tr>
+          <td>absolute</td>
+          <td></td>              
+          <td></td>
+        </tr>
+        <tr>
+          <td>alpha</td>
+          <td></td>              
+          <td></td>
+        </tr>
+        <tr>
+          <td>beta</td>
+          <td></td>              
+          <td></td>
+        </tr>
+        <tr>
+          <td>gamma</td>
+          <td></td>              
+          <td></td>
+        </tr>
+        <tr>     
+          <td>x</td>
+          <td></td>              
+          <td></td>
+        </tr>
+        <tr>     
+          <td>y</td>
+          <td></td>              
+          <td></td>
+        </tr>
+        <tr>     
+          <td>向</td>
+          <td></td>              
+          <td></td>
+        </tr>
+        <tr>     
+          <td>度</td>
+          <td></td>              
+          <td></td>
+        </tr>
+        <tr>     
+          <td>方角</td>
+          <td></td>              
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <!-- info -->
+  <div>
+    <pre id="pre_info"></pre>
+  </div>
+  <div class="canvas_a">
+    <canvas id="canvas_main"></canvas>
+    <canvas id="canvas_sub"></canvas> 
+  </div> 
+  <script type="text/javascript" src="main.js"></script>
+  <script type="text/javascript" src="direction.js"></script>
+  <script type="text/javascript" src="tilt.js"></script>
+</body>
 </html>
